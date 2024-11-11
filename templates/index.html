@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mumbai House Price Prediction</title>
+</head>
+<body>
+    <h1>Predict House Price</h1>
+    <form action="/" method="post" id="predict-form">
+        <label for="area">Area:</label><input type="number" name="area" placeholder="Area" required id="area"><br>
+        <label for="locality">Locality:</label>
+        <select id="locality" name="locality" required>
+            <option value="" disabled selected>Select Locality</option>
+            {% for locality in unique_localities %}
+                <option value="{{ locality }}">{{ locality }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="city">City:</label>
+        <select id="city" name="city" required>
+            <option value="" disabled selected>Select City</option>
+            {% for city in unique_cities %}
+                <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+        </select><br>
+        
+
+        <label for="Property Type">Property Type:</label>
+        <select id="property_type" name="property_type" required>
+            <option value="" disabled selected>Select Property Type</option>
+            {% for prop_type in property_types %}
+                <option value="{{ prop_type }}">{{ prop_type }}</option>
+            {% endfor %}
+        </select><br>
+
+        
+        <input type="number" name="bedroom_num" placeholder="Bedrooms" required><br>
+        <input type="number" name="bathroom_num" placeholder="Bathrooms" required><br>
+        <input type="number" name="balcony_num" placeholder="Balconies" required><br>
+        <label for="Property Type">Furnished Status:</label>
+        <select id="furnished" name="furnished" required>
+            <option value="" disabled selected>Select Furnished Status</option>
+            {% for fur in furnished %}
+                <option value="{{ fur }}">{{ fur }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="age" name="age" placeholder="Property Age" required><br>
+        <input type="number" name="total_floors" placeholder="Total Floors" required><br>
+        <button type="submit">Predict Price</button>
+    </form>
+
+    
+    <div id="prediction-result"></div>
+</body>
+<script>
+    document.getElementById("predict-form").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())  // Assuming the backend returns JSON
+        .then(data => {
+            // Check if prediction is available and display it
+            if (data.prediction) {
+                document.getElementById('prediction-result').innerHTML = `Predicted Price: ${data.prediction}`;
+            } else if (data.error) {
+                document.getElementById('prediction-result').innerHTML = `Error: ${data.error}`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('prediction-result').innerHTML = 'An error occurred.';
+        });
+        
+    })
+</script>
+</html>
