@@ -4,9 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mumbai House Price Prediction</title>
+    <link rel="stylesheet" href={{ url_for('static', filename='style.css')}}>
 </head>
 <body>
-    <h1>Predict House Price</h1>
+    <nav>
+        <h1>Predict House Price</h1>
+        <ul>
+            <li>About</li>
+            <li><a href="https://github.com/Prem-Poudel/house-price-pred.git">Source Code</a></li>
+            <li><a href="https://www.linkedin.com/in/prem-poudel/">LinkedIn</a></li>
+        </ul>
+    </nav>
     <form action="/" method="post" id="predict-form">
         <label for="area">Area:</label><input type="number" name="area" placeholder="Area" required id="area"><br>
         <label for="locality">Locality:</label>
@@ -53,30 +61,5 @@
     
     <div id="prediction-result"></div>
 </body>
-<script>
-    document.getElementById("predict-form").addEventListener("submit", function(e){
-        e.preventDefault();
-
-        const formData = new FormData(this);
-
-        fetch('/', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())  // Assuming the backend returns JSON
-        .then(data => {
-            // Check if prediction is available and display it
-            if (data.prediction) {
-                document.getElementById('prediction-result').innerHTML = `Predicted Price: ${data.prediction}`;
-            } else if (data.error) {
-                document.getElementById('prediction-result').innerHTML = `Error: ${data.error}`;
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('prediction-result').innerHTML = 'An error occurred.';
-        });
-        
-    })
-</script>
+<script src={{ url_for('static', filename='index.js')}}></script>
 </html>
